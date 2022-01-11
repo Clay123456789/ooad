@@ -2,7 +2,9 @@ package com.ooad.system_management.Pojo;
 
 public class Student {
     private String  studentid;
-    private String  name;
+    private String account;
+    private String password;
+    private String stu_name;
     private String  sex;
     private String  grade;
     private String  college;
@@ -18,9 +20,9 @@ public class Student {
     public Student() {
     }
 
-    public Student(String studentid, String name, String sex, String grade, String college, String class_, String tutor_name, String dormitory, String nativeplace, String address, String phone, String email, String otherInformation) {
+    public Student(String studentid, String stu_name, String sex, String grade, String college, String class_, String tutor_name, String dormitory, String nativeplace, String address, String phone, String email, String otherInformation) {
         this.studentid = studentid;
-        this.name = name;
+        this.stu_name = stu_name;
         this.sex = sex;
         this.grade = grade;
         this.college = college;
@@ -34,6 +36,8 @@ public class Student {
         this.otherInformation = otherInformation;
     }
     //get and set
+
+
     public String getStudentid() {
         return studentid;
     }
@@ -42,12 +46,28 @@ public class Student {
         this.studentid = studentid;
     }
 
-    public String getName() {
-        return name;
+    public String getAccount() {
+        return account;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getStu_name() {
+        return stu_name;
+    }
+
+    public void setStu_name(String stu_name) {
+        this.stu_name = stu_name;
     }
 
     public String getSex() {
@@ -142,7 +162,9 @@ public class Student {
     public String toString() {
         return "Student{" +
                 "studentid='" + studentid + '\'' +
-                ", name='" + name + '\'' +
+                ", account='" + account + '\'' +
+                ", password='" + password + '\'' +
+                ", stu_name='" + stu_name + '\'' +
                 ", sex='" + sex + '\'' +
                 ", grade='" + grade + '\'' +
                 ", college='" + college + '\'' +

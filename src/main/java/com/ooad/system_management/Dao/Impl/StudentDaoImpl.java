@@ -31,8 +31,8 @@ public class StudentDaoImpl implements IStudentDao {
     @Override
     public boolean insertStudent(Student student) {
 
-        int result= jdbcTemplate.update("insert into student(studentid,stu_name,sex,grade,college,class,tutor_name,dormitory,nativeplace,address,phone,email,otherinformation) values(?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                student.getStudentid(),student.getName(),student.getSex(),student.getGrade(),student.getCollege(),student.getClass_(),student.getTutor_name(),student.getDormitory()
+        int result= jdbcTemplate.update("insert into student(studentid,account,password,stu_name,sex,grade,college,class,tutor_name,dormitory,nativeplace,address,phone,email,otherinformation) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                student.getStudentid(),student.getAccount(),student.getPassword(),student.getStu_name(),student.getSex(),student.getGrade(),student.getCollege(),student.getClass_(),student.getTutor_name(),student.getDormitory()
         ,student.getNativeplace(),student.getAddress(),student.getPhone(),student.getEmail(),student.getOtherInformation());
         if(result>0){
             // 判断是否缓存存在
@@ -55,7 +55,7 @@ public class StudentDaoImpl implements IStudentDao {
      */
     @Override
     public boolean deleteStudent(String studentid) {
-        int result = jdbcTemplate.update("delete from station where sid = ?", studentid);
+        int result = jdbcTemplate.update("delete from student where sid = ?", studentid);
         if (result != 0) {
             // 判断是否缓存存在
             String key = "student_" + studentid;
@@ -77,7 +77,7 @@ public class StudentDaoImpl implements IStudentDao {
     public boolean updateStudent(Student student) {
         //返回影响行数，为1表示修改成功
         int result = jdbcTemplate.update("update student set stu_name=?,sex=?,grade=?,college=?,class=?,tutor_name=?,dormitory=?,nativeplace=?,address=?,phone=?,email=?,otherinformation=? where studentid=?"
-                ,student.getName(),student.getSex(),student.getGrade(),student.getCollege(),student.getClass_(),student.getTutor_name(),student.getDormitory()
+                ,student.getStu_name(),student.getSex(),student.getGrade(),student.getCollege(),student.getClass_(),student.getTutor_name(),student.getDormitory()
                 ,student.getNativeplace(),student.getAddress(),student.getPhone(),student.getEmail(),student.getOtherInformation(),student.getStudentid());
         if(result > 0){
             // 判断是否缓存存在
@@ -94,9 +94,48 @@ public class StudentDaoImpl implements IStudentDao {
     }
 
     @Override
+    public boolean judgeStudentByEmail(Student student) {
+        RowMapper<Student> rowMapper = new BeanPropertyRowMapper<Student>(Student.class);
+        Object object = null;
+        try {
+            object = jdbcTemplate.queryForObject("select * from student where email = ?",rowMapper,student.getEmail());
+        } catch (EmptyResultDataAccessException e1) {
+            //查询结果为空，返回false
+            return false;
+        }
+        Student stu=(Student)object;
+        System.out.println(stu.toString());
+        System.out.println(student.toString());
+        if(!stu.getPassword().equals(student.getPassword())){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean judgeStudentByAccount(Student student) {
+        RowMapper<Student> rowMapper = new BeanPropertyRowMapper<Student>(Student.class);
+        Object object = null;
+        try {
+            object = jdbcTemplate.queryForObject("select * from student where account = ?",rowMapper,student.getAccount());
+        } catch (EmptyResultDataAccessException e1) {
+            //查询结果为空，返回false
+            return false;
+        }
+        Student stu=(Student)object;
+        System.out.println(stu.toString());
+        System.out.println(student.toString());
+        if(!stu.getPassword().equals(student.getPassword())){
+            return false;
+        }
+        return true;
+    }
+
+
+    @Override
     public Student getUserByStudentid(String studentid) {
         // 从缓存中 取出信息
-        String key = "station_" + studentid;
+        String key = "student_" + studentid;
         Boolean hasKey = redisTemplate.hasKey(key);
         ValueOperations operations = redisTemplate.opsForValue();
         //缓存中存在
@@ -108,7 +147,7 @@ public class StudentDaoImpl implements IStudentDao {
         RowMapper<Student> rowMapper = new BeanPropertyRowMapper<Student>(Student.class);
         Object object = null;
         try {
-            object = jdbcTemplate.queryForObject("select * from station where studentid = ?",rowMapper,studentid);
+            object = jdbcTemplate.queryForObject("select * from student where studentid = ?",rowMapper,studentid);
         } catch (EmptyResultDataAccessException e1) {
             //查询结果为空，返回null
             return null;
@@ -125,7 +164,7 @@ public class StudentDaoImpl implements IStudentDao {
     @Override
     public Student getUserByEmail(String email) {
         // 从缓存中 取出信息
-        String key = "station_" + email;
+        String key = "student_" + email;
         Boolean hasKey = redisTemplate.hasKey(key);
         ValueOperations operations = redisTemplate.opsForValue();
         //缓存中存在
@@ -137,7 +176,7 @@ public class StudentDaoImpl implements IStudentDao {
         RowMapper<Student> rowMapper = new BeanPropertyRowMapper<Student>(Student.class);
         Object object = null;
         try {
-            object = jdbcTemplate.queryForObject("select * from station where email = ?",rowMapper,email);
+            object = jdbcTemplate.queryForObject("select * from student where email = ?",rowMapper,email);
         } catch (EmptyResultDataAccessException e1) {
             //查询结果为空，返回null
             return null;
@@ -151,9 +190,9 @@ public class StudentDaoImpl implements IStudentDao {
     }
 
     @Override
-    public Student getUserByUsername(String username) {
+    public Student getUserByAccount(String username) {
         // 从缓存中 取出信息
-        String key = "station_" + username;
+        String key = "student_" + username;
         Boolean hasKey = redisTemplate.hasKey(key);
         ValueOperations operations = redisTemplate.opsForValue();
         //缓存中存在
@@ -165,7 +204,7 @@ public class StudentDaoImpl implements IStudentDao {
         RowMapper<Student> rowMapper = new BeanPropertyRowMapper<Student>(Student.class);
         Object object = null;
         try {
-            object = jdbcTemplate.queryForObject("select * from station where stu_name = ?",rowMapper,username);
+            object = jdbcTemplate.queryForObject("select * from student where account = ?",rowMapper,username);
         } catch (EmptyResultDataAccessException e1) {
             //查询结果为空，返回null
             return null;

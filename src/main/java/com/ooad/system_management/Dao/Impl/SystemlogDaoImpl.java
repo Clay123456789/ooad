@@ -9,9 +9,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+@Repository
 public class SystemlogDaoImpl implements ISystemlogDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -42,7 +43,7 @@ public class SystemlogDaoImpl implements ISystemlogDao {
         RowMapper<Systemlog> rowMapper = new BeanPropertyRowMapper<Systemlog>(Systemlog.class);
         Object object = null;
         try{
-            object=jdbcTemplate.queryForObject("select * from systemlog where email = ?",rowMapper,time);
+            object=jdbcTemplate.queryForObject("select * from systemlog where time = ?",rowMapper,time);
         }catch (EmptyResultDataAccessException e1) {
             //查询结果为空，返回null
             return null;

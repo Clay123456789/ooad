@@ -10,4 +10,5 @@ public interface ISystemlogDao {
     Systemlog searchLogByTime(String time);
     Systemlog searchLogByOperator(String operator);
     List<Systemlog> getAllLog();
+
 }

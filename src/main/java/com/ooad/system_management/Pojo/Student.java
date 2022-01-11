@@ -14,10 +14,26 @@ public class Student {
     private String  phone;
     private String  email;
     private String  otherInformation;
-
+    //构造函数
     public Student() {
     }
 
+    public Student(String studentid, String name, String sex, String grade, String college, String class_, String tutor_name, String dormitory, String nativeplace, String address, String phone, String email, String otherInformation) {
+        this.studentid = studentid;
+        this.name = name;
+        this.sex = sex;
+        this.grade = grade;
+        this.college = college;
+        this.class_ = class_;
+        this.tutor_name = tutor_name;
+        this.dormitory = dormitory;
+        this.nativeplace = nativeplace;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.otherInformation = otherInformation;
+    }
+    //get and set
     public String getStudentid() {
         return studentid;
     }

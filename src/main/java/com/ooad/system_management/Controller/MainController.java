@@ -23,6 +23,7 @@ public class MainController {
         return "Hello,"+username+"!";
     }
 
+
     /*
      * 请求方式：post
      * 功能：获取学生信息

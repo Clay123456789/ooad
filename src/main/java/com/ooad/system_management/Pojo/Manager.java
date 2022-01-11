@@ -1,13 +1,17 @@
 package com.ooad.system_management.Pojo;
 
-public class manager {
+public class Manager {
     //数据成员
     private String account;//账号
     private String password;//密码
     private String phone;//手机号
     private String Email;//邮箱
+
     //构造函数
-    public manager(String account, String password, String phone, String email) {
+    public Manager(){
+
+    }
+    public Manager(String account, String password, String phone, String email) {
         this.account = account;
         this.password = password;
         this.phone = phone;

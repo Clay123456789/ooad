@@ -13,7 +13,9 @@ public class Staff {
     private String  Email;
     private String  otherInformation;
     //构造函数
+    public Staff(){
 
+    }
     public Staff(String staffID, String name, String sex, String college, String department, String nativeplace, String address, String phone, String email, String otherInformation) {
         this.staffID = staffID;
         this.name = name;

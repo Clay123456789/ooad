@@ -1,4 +1,4 @@
-package com.subway_footprint_system.springboot_project.Pojo;
+package com.ooad.system_management.Pojo;
 
 public class Result {
     /**

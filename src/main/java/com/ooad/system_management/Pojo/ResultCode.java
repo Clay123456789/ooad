@@ -1,4 +1,4 @@
-package com.subway_footprint_system.springboot_project.Pojo;
+package com.ooad.system_management.Pojo;
 
 //响应码枚举，参考 HTTP状态码的语义
 public enum ResultCode {

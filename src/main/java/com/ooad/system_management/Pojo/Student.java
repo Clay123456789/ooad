@@ -122,4 +122,22 @@ public class Student {
         this.otherInformation = otherInformation;
     }
 
+    @Override
+    public String toString() {
+        return "Student{" +
+                "studentid='" + studentid + '\'' +
+                ", name='" + name + '\'' +
+                ", sex='" + sex + '\'' +
+                ", grade='" + grade + '\'' +
+                ", college='" + college + '\'' +
+                ", class_='" + class_ + '\'' +
+                ", tutor_name='" + tutor_name + '\'' +
+                ", dormitory='" + dormitory + '\'' +
+                ", nativeplace='" + nativeplace + '\'' +
+                ", address='" + address + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", otherInformation='" + otherInformation + '\'' +
+                '}';
+    }
 }

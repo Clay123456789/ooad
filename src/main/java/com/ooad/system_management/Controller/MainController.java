@@ -130,7 +130,7 @@ public class MainController {
      * 请求方式：post
      * 功能：发送注册邮箱
      * 路径 /user/sendRegistEmail
-     * 传参(json) email,whichpeople(人员类别)
+     * 传参(json) email,whichpeople
      * 返回值(json--Result) code,message,data(str)
      * */
     @CrossOrigin
@@ -145,12 +145,14 @@ public class MainController {
         }
         return ResultFactory.buildSuccessResult("已发送验证码至邮箱！");
     }
+
     /*
      * 请求方式：post
      * 功能：注册新用户
      * 路径 /user/regist
      * 学生类型：传参(json) code,whichpeople,studentid,account,password,stu_name,sex,grade,college,class_,tutor_name,dormitory,nativeplace,address,phone,email,otherinformation
-     *
+     * 职工类型： 传参(json) code,whichpeople,staffid,account,password,sta_name,sex,college,department,nativeplace,address,phone,email,otherinformation
+     * 管理员类型： 传参(json) code,whichpeople,managerid,account,password,phone,email
      * 返回值(json--Result) code,message,data(str)
      * */
     @CrossOrigin
@@ -165,24 +167,54 @@ public class MainController {
     }
     /*
      * 请求方式：post
-     * 功能：获取学生信息
-     * 路径 /student/getStudent
-     * 传参(json):studentid/name/email
-     * 返回值(json--Result) code,message,data(Student)一个完整的Student类实例
+     * 功能：获取用户信息
+     * 路径 /user/getUser
+     * 传参(json):whichpeple,studentid/staffid/managerid/account/email
+     * 返回值(json--Result) code,message,data(Student/Staff/Manager)一个完整的Student/Staff/Manager类实例
+     * 类的具体字段见 Src/Pojo/..
      */
     @CrossOrigin
-    @PostMapping(value ="/student/getStudent")
+    @PostMapping(value ="/user/getUser")
     @ResponseBody
-    public Result getStudent(@Valid @RequestBody Student student){
-        if(student.getStudentid()!=null){
-            return  ResultFactory.buildSuccessResult(studentService.getStudentByStudentid(student.getStudentid()));
-        }else if(student.getAccount()!=null){
-            return ResultFactory.buildSuccessResult(studentService.getStudentByAccount(student.getAccount()));
+    public Result getUser(@Valid @RequestBody User user){
+        switch (user.getWhichpeople()){
+            case 0:
+                Student student=user.toStudent(user);
+                if(student.getStudentid()!=null){
+                    return  ResultFactory.buildSuccessResult(studentService.getStudentByStudentid(student.getStudentid()));
+                }else if(student.getAccount()!=null){
+                    return ResultFactory.buildSuccessResult(studentService.getStudentByAccount(student.getAccount()));
+                }
+                else if(student.getEmail()!=null){
+                    return ResultFactory.buildSuccessResult(studentService.getStudentByEmail(student.getEmail()));
+                }
+                break;
+            case 1:
+                Staff staff=user.toStaff(user);
+                if(staff.getStaffid()!=null){
+                    return  ResultFactory.buildSuccessResult(staffService.getStaffByStaffid(staff.getStaffid()));
+                }else if(staff.getAccount()!=null){
+                    return ResultFactory.buildSuccessResult(staffService.getStaffByAccount(staff.getAccount()));
+                }
+                else if(staff.getEmail()!=null){
+                    return ResultFactory.buildSuccessResult(staffService.getStaffByEmail(staff.getEmail()));
+                }
+                break;
+            case 2:
+                Manager manager=user.toManager(user);
+                if(manager.getManagerid()!=null){
+                    return  ResultFactory.buildSuccessResult(managerService.getManagerByManagerid(manager.getManagerid()));
+                }else if(manager.getAccount()!=null){
+                    return ResultFactory.buildSuccessResult(managerService.getManagerByAccount(manager.getAccount()));
+                }
+                else if(manager.getEmail()!=null){
+                    return ResultFactory.buildSuccessResult(managerService.getManagerByEmail(manager.getEmail()));
+                }
+                break;
+            default:
+                break;
         }
-        else if(student.getEmail()!=null){
-            return ResultFactory.buildSuccessResult(studentService.getStudentByEmail(student.getEmail()));
-        }
-        return ResultFactory.buildFailResult("获取学生信息失败!");
+        return ResultFactory.buildFailResult("获取用户信息失败!");
     }
 
 

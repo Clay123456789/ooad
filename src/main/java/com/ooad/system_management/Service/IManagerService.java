@@ -17,5 +17,5 @@ public interface IManagerService {
 
     //登陆判断方法
     boolean judgeManagerByEmail(Manager manager);
-    boolean judgeManagerByAccount(Manager manager)
+    boolean judgeManagerByAccount(Manager manager);
 }

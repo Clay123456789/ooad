@@ -161,7 +161,7 @@ public class StaffDaoImpl implements IStaffDao {
         RowMapper<Staff> rowMapper = new BeanPropertyRowMapper<Staff>(Staff.class);
         Object object = null;
         try {
-            object = jdbcTemplate.queryForObject("select * from staff where email = ?",rowMapper,account);
+            object = jdbcTemplate.queryForObject("select * from staff where account = ?",rowMapper,account);
         } catch (EmptyResultDataAccessException e1) {
             //查询结果为空，返回null
             return null;

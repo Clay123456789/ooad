@@ -10,9 +10,11 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ManagerServiceImpl implements IManagerService {
     @Autowired
     private ManagerDaoImpl managerDao;

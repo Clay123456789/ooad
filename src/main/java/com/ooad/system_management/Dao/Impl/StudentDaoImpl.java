@@ -133,7 +133,7 @@ public class StudentDaoImpl implements IStudentDao {
 
 
     @Override
-    public Student getUserByStudentid(String studentid) {
+    public Student getStudentByStudentid(String studentid) {
         // 从缓存中 取出信息
         String key = "student_" + studentid;
         Boolean hasKey = redisTemplate.hasKey(key);
@@ -160,7 +160,7 @@ public class StudentDaoImpl implements IStudentDao {
     }
 
     @Override
-    public Student getUserByEmail(String email) {
+    public Student getStudentByEmail(String email) {
         // 从缓存中 取出信息
         String key = "student_" + email;
         Boolean hasKey = redisTemplate.hasKey(key);
@@ -188,9 +188,9 @@ public class StudentDaoImpl implements IStudentDao {
     }
 
     @Override
-    public Student getUserByAccount(String username) {
+    public Student getStudentByAccount(String account) {
         // 从缓存中 取出信息
-        String key = "student_" + username;
+        String key = "student_" + account;
         Boolean hasKey = redisTemplate.hasKey(key);
         ValueOperations operations = redisTemplate.opsForValue();
         //缓存中存在
@@ -202,7 +202,7 @@ public class StudentDaoImpl implements IStudentDao {
         RowMapper<Student> rowMapper = new BeanPropertyRowMapper<Student>(Student.class);
         Object object = null;
         try {
-            object = jdbcTemplate.queryForObject("select * from student where account = ?",rowMapper,username);
+            object = jdbcTemplate.queryForObject("select * from student where account = ?",rowMapper,account);
         } catch (EmptyResultDataAccessException e1) {
             //查询结果为空，返回null
             return null;

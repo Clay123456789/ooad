@@ -45,7 +45,7 @@ public class StaffServiceImpl implements IStaffService {
 
     @Override
     public Staff getStaffByEmail(String email) {
-        return staffDao.getStaffByAccount(email);
+        return staffDao.getStaffByEmail(email);
     }
 
     @Override

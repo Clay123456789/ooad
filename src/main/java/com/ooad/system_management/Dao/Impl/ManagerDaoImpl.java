@@ -11,11 +11,13 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+@Repository
 public class ManagerDaoImpl implements IManagerDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;

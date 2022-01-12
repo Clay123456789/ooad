@@ -19,6 +19,10 @@ public class EMailServiceImpl implements IEMailService {
     @Autowired
     private StudentServiceImpl studentService;
     @Autowired
+    private  StaffServiceImpl staffService;
+    @Autowired
+    private ManagerServiceImpl managerService;
+    @Autowired
     private HttpSession httpSession;
     //application.properties中已配置的值
     @Value("${spring.mail.username}")
@@ -32,17 +36,22 @@ public class EMailServiceImpl implements IEMailService {
         //该邮箱已经注册
         switch (whichpeople){
             case 0:
-                if(studentService.getUserByEmail(email)!=null){
+                if(studentService.getStudentByEmail(email)!=null){
                     return false;
                 }
                 break;
             case 1:
+                if(staffService.getStaffByEmail(email)!=null){
+                    return false;
+                }
                 break;
             case 2:
+                if(managerService.getManagerByEmail(email)!=null){
+                    return false;
+                }
                 break;
             default:
-
-                break;
+                return false;
         }
         try {
             SimpleMailMessage mailMessage = new SimpleMailMessage();
@@ -84,6 +93,7 @@ public class EMailServiceImpl implements IEMailService {
      * 检验验证码是否一致
      */
     public boolean registered(User user){
+        System.out.println(user);
         //获取session中的验证信息
         String email = (String) httpSession.getAttribute("email");
         String code = (String) httpSession.getAttribute("code");
@@ -107,8 +117,10 @@ public class EMailServiceImpl implements IEMailService {
                 studentService.insertStudent(user.toStudent(user));
                 break;
             case 1:
+                staffService.insertStaff(user.toStaff(user));
                 break;
             case 2:
+                managerService.insertManager(user.toManager(user));
                 break;
             default:
 

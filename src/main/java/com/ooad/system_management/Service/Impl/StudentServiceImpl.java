@@ -31,11 +31,11 @@ public class StudentServiceImpl implements IStudentService {
     }
 
     @Override
-    public Student getUserByStudentid(String studentid){return studentDao.getUserByStudentid(studentid);}
+    public Student getStudentByStudentid(String studentid){return studentDao.getStudentByStudentid(studentid);}
     @Override
-    public Student getUserByEmail(String email){return studentDao.getUserByEmail(email);}
+    public Student getStudentByEmail(String email){return studentDao.getStudentByEmail(email);}
     @Override
-    public Student getUserByAccount(String username){return studentDao.getUserByAccount(username);}
+    public Student getStudentByAccount(String account){return studentDao.getStudentByAccount(account);}
     @Override
     public List<Student> getAllStudents(){return studentDao.getAllStudents();}
 }

@@ -216,7 +216,118 @@ public class MainController {
         }
         return ResultFactory.buildFailResult("获取用户信息失败!");
     }
+    /*
+     * 请求方式：post
+     * 功能：删除用户信息
+     * 路径 /user/deleteUser
+     * 传参(json) whichpeople,studentid/staffid/managerid
+     * 返回值 (json--Result) code,message,data(str)
+     * */
+    @CrossOrigin
+    @PostMapping(value ="/user/deleteUser")
+    @ResponseBody
+    public Result deleteLightedStation(@Valid @RequestBody User user){
+        switch (user.getWhichpeople()){
+            case 0:
+                Student student=user.toStudent(user);
+                if(!studentService.deleteStudent(student.getStudentid())){
+                    return ResultFactory.buildFailResult("删除用户信息失败");
+                }
+                break;
+            case 1:
+                Staff staff=user.toStaff(user);
+                if(!staffService.deleteStaff(staff.getStaffid())){
+                    return ResultFactory.buildFailResult("删除用户信息失败");
+                }
+                break;
+            case 2:
+                Manager manager=user.toManager(user);
+                if(!managerService.deleteManager(manager.getManagerid())){
+                    return ResultFactory.buildFailResult("删除用户信息失败");
+                }
 
+                break;
+            default:
+                break;
+        }
+        return ResultFactory.buildSuccessResult("已成功删除用户信息！");
+    }
+
+    /*
+     * 请求方式：post
+     * 功能：修改用户信息
+     * 路径 /user/updateUser
+     * 学生类型：传参(json) whichpeople,studentid,account,password,stu_name,sex,grade,college,class_,tutor_name,dormitory,nativeplace,address,phone,email,otherinformation
+     * 职工类型： 传参(json) whichpeople,staffid,account,password,sta_name,sex,college,department,nativeplace,address,phone,email,otherinformation
+     * 管理员类型： 传参(json) whichpeople,managerid,account,password,phone,email
+     * 返回值(json--Result) code,message,data(Str)
+     * */
+    @CrossOrigin
+    @PostMapping(value ="/user/updateUser")
+    @ResponseBody
+    public Result updateUser(@Valid @RequestBody User user){
+        switch (user.getWhichpeople()){
+            case 0:
+                Student student=user.toStudent(user);
+                if(!studentService.updateStudent(student)){
+                    return ResultFactory.buildFailResult("修改用户信息失败");
+                }
+                break;
+            case 1:
+                Staff staff=user.toStaff(user);
+                if(!staffService.updateStaff(staff)){
+                    return ResultFactory.buildFailResult("修改用户信息失败");
+                }
+                break;
+            case 2:
+                Manager manager=user.toManager(user);
+                if(!managerService.updateManager(manager)){
+                    return ResultFactory.buildFailResult("修改用户信息失败");
+                }
+                break;
+            default:
+                break;
+        }
+        return ResultFactory.buildSuccessResult("已成功修改用户信息！");
+    }
+
+    /*
+     * 请求方式：post
+     * 功能：增添用户信息
+     * 路径 /user/insertUser
+     * 学生类型：传参(json) whichpeople,studentid,account,password,stu_name,sex,grade,college,class_,tutor_name,dormitory,nativeplace,address,phone,email,otherinformation
+     * 职工类型： 传参(json) whichpeople,staffid,account,password,sta_name,sex,college,department,nativeplace,address,phone,email,otherinformation
+     * 管理员类型： 传参(json) whichpeople,managerid,account,password,phone,email
+     * 返回值(json--Result) code,message,data(Str)
+     * */
+    @CrossOrigin
+    @PostMapping(value ="/user/insertUser")
+    @ResponseBody
+    public Result insertUser(@Valid @RequestBody User user){
+        switch (user.getWhichpeople()){
+            case 0:
+                Student student=user.toStudent(user);
+                if(!studentService.insertStudent(student)){
+                    return ResultFactory.buildFailResult("新增用户信息失败");
+                }
+                break;
+            case 1:
+                Staff staff=user.toStaff(user);
+                if(!staffService.insertStaff(staff)){
+                    return ResultFactory.buildFailResult("新增用户信息失败");
+                }
+                break;
+            case 2:
+                Manager manager=user.toManager(user);
+                if(!managerService.insertManager(manager)){
+                    return ResultFactory.buildFailResult("新增用户信息失败");
+                }
+                break;
+            default:
+                break;
+        }
+        return ResultFactory.buildSuccessResult("已成功新增用户信息！");
+    }
 
     /*
      * 请求方式：post

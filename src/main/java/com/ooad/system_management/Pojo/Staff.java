@@ -2,44 +2,44 @@ package com.ooad.system_management.Pojo;
 
 public class Staff {
     //数据成员
-    private String  staffID;
+    private String staffid;
     private String account;
     private String password;
-    private String  name;
+    private String sta_name;
     private String  sex;
     private String  college;
     private String  department;
     private String  nativeplace;
     private String  address;
     private String  phone;
-    private String  Email;
+    private String email;
     private String  otherInformation;
     //构造函数
     public Staff(){
 
     }
-    public Staff(String staffID, String name, String sex, String college, String department, String nativeplace, String address, String phone, String email, String otherInformation) {
-        this.staffID = staffID;
-        this.name = name;
+    public Staff(String staffid, String sta_name, String sex, String college, String department, String nativeplace, String address, String phone, String email, String otherInformation) {
+        this.staffid = staffid;
+        this.sta_name = sta_name;
         this.sex = sex;
         this.college = college;
         this.department = department;
         this.nativeplace = nativeplace;
         this.address = address;
         this.phone = phone;
-        Email = email;
+        this.email = email;
         this.otherInformation = otherInformation;
     }
 
     //get and set
 
 
-    public String getStaffID() {
-        return staffID;
+    public String getStaffid() {
+        return staffid;
     }
 
-    public void setStaffID(String staffID) {
-        this.staffID = staffID;
+    public void setStaffid(String staffid) {
+        this.staffid = staffid;
     }
 
     public String getAccount() {
@@ -58,12 +58,12 @@ public class Staff {
         this.password = password;
     }
 
-    public String getName() {
-        return name;
+    public String getSta_name() {
+        return sta_name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setSta_name(String sta_name) {
+        this.sta_name = sta_name;
     }
 
     public String getSex() {
@@ -115,11 +115,11 @@ public class Staff {
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
     public void setEmail(String email) {
-        Email = email;
+        this.email = email;
     }
 
     public String getOtherInformation() {
@@ -133,15 +133,15 @@ public class Staff {
     @Override
     public String toString() {
         return "Staff{" +
-                "staffID='" + staffID + '\'' +
-                ", name='" + name + '\'' +
+                "staffID='" + staffid + '\'' +
+                ", name='" + sta_name + '\'' +
                 ", sex='" + sex + '\'' +
                 ", college='" + college + '\'' +
                 ", department='" + department + '\'' +
                 ", nativeplace='" + nativeplace + '\'' +
                 ", address='" + address + '\'' +
                 ", phone='" + phone + '\'' +
-                ", Email='" + Email + '\'' +
+                ", Email='" + email + '\'' +
                 ", otherInformation='" + otherInformation + '\'' +
                 '}';
     }

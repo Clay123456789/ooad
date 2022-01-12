@@ -8,7 +8,7 @@ public class User {
     private String account;//账号
     private String password;//密码
     private String  stu_name;
-    //private String sta_name;
+    private String sta_name;
     private String  sex;
     private String  grade;
     private String  college;
@@ -92,6 +92,14 @@ public class User {
 
     public void setStu_name(String stu_name) {
         this.stu_name = stu_name;
+    }
+
+    public String getSta_name() {
+        return sta_name;
+    }
+
+    public void setSta_name(String sta_name) {
+        this.sta_name = sta_name;
     }
 
     public String getSex() {
@@ -242,8 +250,8 @@ public class User {
         Staff staff=new Staff();
         staff.setAccount(user.getAccount());
         staff.setPassword(user.getPassword());
-        staff.setStaffID(user.getStaffid());
-        staff.setName(user.getStu_name());
+        staff.setStaffid(user.getStaffid());
+        staff.setSta_name(user.getSta_name());
         staff.setSex(user.getSex());
         staff.setCollege(user.getCollege());
         staff.setDepartment(user.getDepartment());

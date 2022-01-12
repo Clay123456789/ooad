@@ -2,13 +2,8 @@ package com.ooad.system_management.Controller;
 
 import com.alibaba.fastjson.JSON;
 import com.ooad.system_management.Dao.Impl.ResultFactory;
-import com.ooad.system_management.Pojo.Result;
-import com.ooad.system_management.Pojo.Student;
-import com.ooad.system_management.Pojo.Systemlog;
-import com.ooad.system_management.Pojo.User;
-import com.ooad.system_management.Service.Impl.EMailServiceImpl;
-import com.ooad.system_management.Service.Impl.StudentServiceImpl;
-import com.ooad.system_management.Service.Impl.SystemlogServiceImpl;
+import com.ooad.system_management.Pojo.*;
+import com.ooad.system_management.Service.Impl.*;
 import com.ooad.system_management.Utils.JWTUtil;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +26,10 @@ public class MainController {
     @Autowired
     private SystemlogServiceImpl systemlogService;
     @Autowired
+    private StaffServiceImpl staffService;
+    @Autowired
+    private ManagerServiceImpl managerService;
+    @Autowired
     private EMailServiceImpl eMailService;
     @CrossOrigin
     @RequestMapping("/hello")
@@ -42,7 +41,7 @@ public class MainController {
      * 请求方式：post
      * 功能：登陆
      * 路径 /user/login
-     * 传参(json) account,password,whichPeople
+     * 传参(json) account,password,whichpeople
      * 返回值(json--Result) code,message,data(str)
      */
      @CrossOrigin
@@ -58,11 +57,12 @@ public class MainController {
              return ResultFactory.buildFailResult(message);
          }
          String uid=null;
+         System.out.println(user.getWhichpeople());
          switch (user.getWhichpeople()){
              //学生
              case 0:
                  Student student=user.toStudent(user);
-                 System.out.println(user.toString());
+                 //System.out.println(user.toString());
                  if (!studentService.judgeStudentByAccount(student)) {
                      //用户名不存在，判断是否为Emial登录用户
                      student.setEmail(student.getAccount());
@@ -70,18 +70,47 @@ public class MainController {
                          String message = String.format("登陆失败，账号/密码信息不正确。");
                          return ResultFactory.buildFailResult(message);
                      }
-                     Student stu=studentService.getUserByEmail(student.getEmail());
+                     Student stu=studentService.getStudentByEmail(student.getEmail());
                      uid=stu.getStudentid();
+                     break;
                  }
-                 Student stu=studentService.getUserByAccount(student.getAccount());
+                 Student stu=studentService.getStudentByAccount(student.getAccount());
                  uid=stu.getStudentid();
 
                  break;
              case 1:
-
+                 Staff staff=user.toStaff(user);
+                 System.out.println(user.toString());
+                 if (!staffService.judgeStaffByAccount(staff)) {
+                     //用户名不存在，判断是否为Emial登录用户
+                     staff.setEmail(staff.getAccount());
+                     if (!staffService.judgeStaffByEmail(staff)) {
+                         String message = String.format("登陆失败，账号/密码信息不正确。");
+                         return ResultFactory.buildFailResult(message);
+                     }
+                     Staff sta=staffService.getStaffByEmail(staff.getEmail());
+                     uid=sta.getStaffid();
+                     break;
+                 }
+                 Staff sta=staffService.getStaffByAccount(staff.getAccount());
+                 uid=sta.getStaffid();
                  break;
              case 2:
-
+                 Manager manager=user.toManager(user);
+                 System.out.println(user.toString());
+                 if (!managerService.judgeManagerByAccount(manager)) {
+                     //用户名不存在，判断是否为Emial登录用户
+                     manager.setEmail(manager.getAccount());
+                     if (!managerService.judgeManagerByEmail(manager)) {
+                         String message = String.format("登陆失败，账号/密码信息不正确。");
+                         return ResultFactory.buildFailResult(message);
+                     }
+                     Manager ma=managerService.getManagerByEmail(manager.getEmail());
+                     uid=ma.getManagerid();
+                     break;
+                 }
+                 Manager ma=managerService.getManagerByAccount(manager.getAccount());
+                 uid=ma.getManagerid();
                  break;
              default:
                  String message = String.format("用户类型错误。");
@@ -92,7 +121,9 @@ public class MainController {
          Map<String, String> map = new HashMap<>(); //用来存放payload信息
          map.put("uid",uid);
          // 生成token令牌
+
          String token = JWTUtil.generateToken(map);
+         System.out.println(JWTUtil.getTokenInfo(token));
          return ResultFactory.buildSuccessResult(token);
      }
     /*
@@ -118,7 +149,7 @@ public class MainController {
      * 请求方式：post
      * 功能：注册新用户
      * 路径 /user/regist
-     * 传参(json) code,whichpeople,studentid,account,password,stu_name,sex,grade,college,class,tutor_name,dormitory,nativeplace,address,phone,email,otherinformation
+     * 学生类型：传参(json) code,whichpeople,studentid,account,password,stu_name,sex,grade,college,class_,tutor_name,dormitory,nativeplace,address,phone,email,otherinformation
      *
      * 返回值(json--Result) code,message,data(str)
      * */
@@ -137,19 +168,19 @@ public class MainController {
      * 功能：获取学生信息
      * 路径 /student/getStudent
      * 传参(json):studentid/name/email
-     * 返回值(json--Result) code,message,data(User)一个完整的Student类实例
+     * 返回值(json--Result) code,message,data(Student)一个完整的Student类实例
      */
     @CrossOrigin
     @PostMapping(value ="/student/getStudent")
     @ResponseBody
     public Result getStudent(@Valid @RequestBody Student student){
         if(student.getStudentid()!=null){
-            return  ResultFactory.buildSuccessResult(studentService.getUserByStudentid(student.getStudentid()));
+            return  ResultFactory.buildSuccessResult(studentService.getStudentByStudentid(student.getStudentid()));
         }else if(student.getAccount()!=null){
-            return ResultFactory.buildSuccessResult(studentService.getUserByAccount(student.getAccount()));
+            return ResultFactory.buildSuccessResult(studentService.getStudentByAccount(student.getAccount()));
         }
         else if(student.getEmail()!=null){
-            return ResultFactory.buildSuccessResult(studentService.getUserByEmail(student.getEmail()));
+            return ResultFactory.buildSuccessResult(studentService.getStudentByEmail(student.getEmail()));
         }
         return ResultFactory.buildFailResult("获取学生信息失败!");
     }

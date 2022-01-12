@@ -19,12 +19,23 @@ public class StudentServiceImpl implements IStudentService {
     public boolean deleteStudent(String studentid){return studentDao.deleteStudent(studentid);}
     @Override
     public boolean updateStudent(Student user){return studentDao.updateStudent(user);}
+
+    @Override
+    public boolean judgeStudentByEmail(Student student) {
+        return studentDao.judgeStudentByEmail(student);
+    }
+
+    @Override
+    public boolean judgeStudentByAccount(Student student) {
+        return studentDao.judgeStudentByAccount(student);
+    }
+
     @Override
     public Student getUserByStudentid(String studentid){return studentDao.getUserByStudentid(studentid);}
     @Override
-    public Student getUserByEmail(String email){return studentDao.getUserByStudentid(email);}
+    public Student getUserByEmail(String email){return studentDao.getUserByEmail(email);}
     @Override
-    public Student getUserByUsername(String username){return studentDao.getUserByStudentid(username);}
+    public Student getUserByAccount(String username){return studentDao.getUserByAccount(username);}
     @Override
     public List<Student> getAllStudents(){return studentDao.getAllStudents();}
 }

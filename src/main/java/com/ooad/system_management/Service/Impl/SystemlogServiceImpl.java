@@ -4,9 +4,11 @@ import com.ooad.system_management.Dao.Impl.SystemlogDaoImpl;
 import com.ooad.system_management.Pojo.Systemlog;
 import com.ooad.system_management.Service.ISystemlogService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class SystemlogServiceImpl implements ISystemlogService {
     @Autowired
     private SystemlogDaoImpl systemlogDao;

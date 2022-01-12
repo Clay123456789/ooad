@@ -8,13 +8,10 @@ public class Systemlog {
     public  String operation;
     public  String result;
     //构造函数
-    public Systemlog(String logid, String time, String operator, String operation, String result) {
-        this.logid = logid;
-        this.time = time;
-        this.operator = operator;
-        this.operation = operation;
-        this.result = result;
+
+    public Systemlog() {
     }
+
     //get and set
     public String getLogid() {
         return logid;

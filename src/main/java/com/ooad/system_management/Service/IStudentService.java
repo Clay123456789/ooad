@@ -9,12 +9,12 @@ public interface  IStudentService {
     boolean insertStudent(Student student);
     boolean deleteStudent(String studentid);
     boolean updateStudent(Student user);
-
-    boolean judgeStudentByEmail(Student student);
-    boolean judgeStudentByAccount(Student student);
-
     Student getUserByStudentid(String studentid);
     Student getUserByEmail(String email);
     Student getUserByAccount(String username);
     List<Student> getAllStudents();
+
+    //登陆判断方法
+    boolean judgeStudentByEmail(Student student);
+    boolean judgeStudentByAccount(Student student);
 }

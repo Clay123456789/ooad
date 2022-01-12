@@ -42,7 +42,7 @@ public class MainController {
      * 请求方式：post
      * 功能：登陆
      * 路径 /user/login
-     * 传参(json) account,password,whichPeople
+     * 传参(json) account,password,whichpeople
      * 返回值(json--Result) code,message,data(str)
      */
      @CrossOrigin
@@ -62,7 +62,7 @@ public class MainController {
              //学生
              case 0:
                  Student student=user.toStudent(user);
-                 System.out.println(user.toString());
+                 //System.out.println(user.toString());
                  if (!studentService.judgeStudentByAccount(student)) {
                      //用户名不存在，判断是否为Emial登录用户
                      student.setEmail(student.getAccount());
@@ -92,7 +92,9 @@ public class MainController {
          Map<String, String> map = new HashMap<>(); //用来存放payload信息
          map.put("uid",uid);
          // 生成token令牌
+
          String token = JWTUtil.generateToken(map);
+         System.out.println(JWTUtil.getTokenInfo(token));
          return ResultFactory.buildSuccessResult(token);
      }
     /*
@@ -118,7 +120,7 @@ public class MainController {
      * 请求方式：post
      * 功能：注册新用户
      * 路径 /user/regist
-     * 传参(json) code,whichpeople,studentid,account,password,stu_name,sex,grade,college,class,tutor_name,dormitory,nativeplace,address,phone,email,otherinformation
+     * 学生类型：传参(json) code,whichpeople,studentid,account,password,stu_name,sex,grade,college,class_,tutor_name,dormitory,nativeplace,address,phone,email,otherinformation
      *
      * 返回值(json--Result) code,message,data(str)
      * */
@@ -137,7 +139,7 @@ public class MainController {
      * 功能：获取学生信息
      * 路径 /student/getStudent
      * 传参(json):studentid/name/email
-     * 返回值(json--Result) code,message,data(User)一个完整的Student类实例
+     * 返回值(json--Result) code,message,data(Student)一个完整的Student类实例
      */
     @CrossOrigin
     @PostMapping(value ="/student/getStudent")

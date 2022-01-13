@@ -331,6 +331,40 @@ public class MainController {
 
     /*
      * 请求方式：post
+     * 功能：找回密码
+     * 路径 /user/findPassword
+     * 传参(json) email
+     * 返回值(json--Result) code,message,data(str)
+     * */
+    @CrossOrigin
+    @PostMapping(value = "/user/findPassword")
+    @ResponseBody
+    public Result findPassWord(@Valid @RequestBody User user){
+        if(!eMailService.findPassword_sendEmail(user.getEmail())){
+            return ResultFactory.buildFailResult("此邮箱非您注册时使用的邮箱,找回失败！");
+        }
+        return ResultFactory.buildSuccessResult("找回成功,密码已发送至您的邮箱！");
+    }
+
+    /*
+     * 请求方式：post
+     * 功能：修改用户密码
+     * 路径 /user/changePassword
+     * 传参(json) email,password,newPassword
+     * 返回值(json--Result) code,message,data(Str)
+     * */
+    @CrossOrigin
+    @PostMapping(value = "/user/changePassword")
+    @ResponseBody
+    public Result changePassword(@Valid @RequestBody User user){
+        if(!eMailService.changePassword(user)){
+            return ResultFactory.buildFailResult("信息有误,修改失败！");
+        }
+        return ResultFactory.buildSuccessResult("修改密码成功！");
+    }
+
+    /*
+     * 请求方式：post
      * 功能：获取系统日志
      * 路径 /systemlog/getSystemlog
      * 传参(json):logid/operator/time
@@ -350,6 +384,9 @@ public class MainController {
         }
         return ResultFactory.buildFailResult("获取系统日志失败!");
     }
+
+
+
 
     /*
      * 请求方式：post

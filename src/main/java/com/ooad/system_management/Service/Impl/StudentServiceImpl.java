@@ -10,6 +10,7 @@ import java.util.List;
 
 @Service
 public class StudentServiceImpl implements IStudentService {
+    //增删改查
     @Autowired
     private StudentDaoImpl studentDao;
 
@@ -21,6 +22,16 @@ public class StudentServiceImpl implements IStudentService {
     public boolean updateStudent(Student user){return studentDao.updateStudent(user);}
 
     @Override
+    public Student getStudentByStudentid(String studentid){return studentDao.getStudentByStudentid(studentid);}
+    @Override
+    public Student getStudentByEmail(String email){return studentDao.getStudentByEmail(email);}
+    @Override
+    public Student getStudentByAccount(String account){return studentDao.getStudentByAccount(account);}
+    @Override
+    public List<Student> getAllStudents(){return studentDao.getAllStudents();}
+
+    //登陆判断
+    @Override
     public boolean judgeStudentByEmail(Student student) {
         return studentDao.judgeStudentByEmail(student);
     }
@@ -30,12 +41,6 @@ public class StudentServiceImpl implements IStudentService {
         return studentDao.judgeStudentByAccount(student);
     }
 
-    @Override
-    public Student getStudentByStudentid(String studentid){return studentDao.getStudentByStudentid(studentid);}
-    @Override
-    public Student getStudentByEmail(String email){return studentDao.getStudentByEmail(email);}
-    @Override
-    public Student getStudentByAccount(String account){return studentDao.getStudentByAccount(account);}
-    @Override
-    public List<Student> getAllStudents(){return studentDao.getAllStudents();}
+
+
 }

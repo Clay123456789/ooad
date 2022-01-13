@@ -118,15 +118,8 @@ public class ManagerDaoImpl implements IManagerDao {
 
     @Override
     public Manager getManagerByEmail(String email) {
-        // 从缓存中 取出信息
-        String key = "manager_" + email;
-        Boolean hasKey = redisTemplate.hasKey(key);
         ValueOperations operations = redisTemplate.opsForValue();
-        //缓存中存在
-        if (hasKey) {
-            String str = (String) operations.get(key);
-            return new Gson().fromJson(str, Manager.class);
-        }
+
         //缓存中不存在
         RowMapper<Manager> rowMapper = new BeanPropertyRowMapper<Manager>(Manager.class);
         Object object = null;
@@ -139,21 +132,15 @@ public class ManagerDaoImpl implements IManagerDao {
         Manager s=(Manager)object;
         // 插入缓存中
         String str = new Gson().toJson(s);
+        String key = "manager_" + s.getManagerid();
         operations.set(key, str,60*10, TimeUnit.SECONDS);//向redis里存入数据,设置缓存时间为10min
         return s;
     }
 
     @Override
     public Manager getManagerByAccount(String account) {
-        // 从缓存中 取出信息
-        String key = "manager_" + account;
-        Boolean hasKey = redisTemplate.hasKey(key);
+
         ValueOperations operations = redisTemplate.opsForValue();
-        //缓存中存在
-        if (hasKey) {
-            String str = (String) operations.get(key);
-            return new Gson().fromJson(str, Manager.class);
-        }
         //缓存中不存在
         RowMapper<Manager> rowMapper = new BeanPropertyRowMapper<Manager>(Manager.class);
         Object object = null;
@@ -166,6 +153,7 @@ public class ManagerDaoImpl implements IManagerDao {
         Manager s=(Manager)object;
         // 插入缓存中
         String str = new Gson().toJson(s);
+        String key = "manager_" + s.getManagerid();
         operations.set(key, str,60*10, TimeUnit.SECONDS);//向redis里存入数据,设置缓存时间为10min
         return s;
     }

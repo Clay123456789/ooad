@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Repository
@@ -31,7 +32,7 @@ public class StudentDaoImpl implements IStudentDao {
     @Override
     public boolean insertStudent(Student student) {
 
-        int result= jdbcTemplate.update("insert into student(studentid,account,password,stu_name,sex,grade,college,class,tutor_name,dormitory,nativeplace,address,phone,email,otherinformation) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        int result= jdbcTemplate.update("insert into student(studentid,account,password,stu_name,sex,grade,college,class_,tutor_name,dormitory,nativeplace,address,phone,email,otherinformation) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 student.getStudentid(),student.getAccount(),student.getPassword(),student.getStu_name(),student.getSex(),student.getGrade(),student.getCollege(),student.getClass_(),student.getTutor_name(),student.getDormitory()
         ,student.getNativeplace(),student.getAddress(),student.getPhone(),student.getEmail(),student.getOtherInformation());
         if(result>0){
@@ -76,7 +77,7 @@ public class StudentDaoImpl implements IStudentDao {
     @Override
     public boolean updateStudent(Student student) {
         //返回影响行数，为1表示修改成功
-        int result = jdbcTemplate.update("update student set account=?,password=?,stu_name=?,sex=?,grade=?,college=?,class=?,tutor_name=?,dormitory=?,nativeplace=?,address=?,phone=?,email=?,otherinformation=? where studentid=?",
+        int result = jdbcTemplate.update("update student set account=?,password=?,stu_name=?,sex=?,grade=?,college=?,class_=?,tutor_name=?,dormitory=?,nativeplace=?,address=?,phone=?,email=?,otherinformation=? where studentid=?",
                 student.getAccount(),student.getPassword(),student.getStu_name(),student.getSex(),student.getGrade(),student.getCollege(),student.getClass_(),student.getTutor_name(),student.getDormitory()
                 ,student.getNativeplace(),student.getAddress(),student.getPhone(),student.getEmail(),student.getOtherInformation(),student.getStudentid());
         if(result > 0){

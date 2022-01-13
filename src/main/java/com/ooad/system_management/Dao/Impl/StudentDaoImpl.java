@@ -88,6 +88,7 @@ public class StudentDaoImpl implements IStudentDao {
             if (hasKey) {
                 redisTemplate.delete(key);
             }
+
             return true;
         }
         return false;
@@ -162,15 +163,9 @@ public class StudentDaoImpl implements IStudentDao {
 
     @Override
     public Student getStudentByEmail(String email) {
-        // 从缓存中 取出信息
-        String key = "student_" + email;
-        Boolean hasKey = redisTemplate.hasKey(key);
+
         ValueOperations operations = redisTemplate.opsForValue();
-        //缓存中存在
-        if (hasKey) {
-            String str = (String) operations.get(key);
-            return new Gson().fromJson(str, Student.class);
-        }
+
         //缓存中不存在
         RowMapper<Student> rowMapper = new BeanPropertyRowMapper<Student>(Student.class);
         Object object = null;
@@ -183,6 +178,7 @@ public class StudentDaoImpl implements IStudentDao {
         Student s=(Student)object;
         //插入缓存
         String str = new Gson().toJson(s);
+        String key = "student_" + s.getStudentid();
         operations.set(key, str,60*10, TimeUnit.SECONDS);//向redis里存入数据,设置缓存时间为10min
 
         return s;
@@ -190,16 +186,9 @@ public class StudentDaoImpl implements IStudentDao {
 
     @Override
     public Student getStudentByAccount(String account) {
-        // 从缓存中 取出信息
-        String key = "student_" + account;
-        Boolean hasKey = redisTemplate.hasKey(key);
+
         ValueOperations operations = redisTemplate.opsForValue();
-        //缓存中存在
-        if (hasKey) {
-            String str = (String) operations.get(key);
-            return new Gson().fromJson(str, Student.class);
-        }
-        //缓存中不存在
+
         RowMapper<Student> rowMapper = new BeanPropertyRowMapper<Student>(Student.class);
         Object object = null;
         try {
@@ -211,6 +200,7 @@ public class StudentDaoImpl implements IStudentDao {
         Student s=(Student)object;
         //插入缓存
         String str = new Gson().toJson(s);
+        String key = "student_" +s.getStudentid();
         operations.set(key, str,60*10, TimeUnit.SECONDS);//向redis里存入数据,设置缓存时间为10min
 
         return s;

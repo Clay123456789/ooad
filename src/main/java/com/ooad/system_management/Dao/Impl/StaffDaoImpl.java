@@ -81,7 +81,7 @@ public class StaffDaoImpl implements IStaffDao {
                 ,staff.getNativeplace(),staff.getAddress(),staff.getPhone(),staff.getEmail(),staff.getOtherInformation(),staff.getStaffid());
         if(result > 0){
             // 判断是否缓存存在
-            String key = "student_" + staff.getStaffid();
+            String key = "staff_" + staff.getStaffid();
             Boolean hasKey = redisTemplate.hasKey(key);
             // 缓存存在，进行删除
             if (hasKey) {

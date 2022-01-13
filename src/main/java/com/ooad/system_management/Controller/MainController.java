@@ -4,15 +4,22 @@ import com.alibaba.fastjson.JSON;
 import com.ooad.system_management.Dao.Impl.ResultFactory;
 import com.ooad.system_management.Pojo.*;
 import com.ooad.system_management.Service.Impl.*;
+import com.ooad.system_management.Utils.FtpConfig;
+import com.ooad.system_management.Utils.FtpUtil;
 import com.ooad.system_management.Utils.JWTUtil;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +38,80 @@ public class MainController {
     private ManagerServiceImpl managerService;
     @Autowired
     private EMailServiceImpl eMailService;
+    @Autowired
+    FtpConfig ftpConfig;
+
+    /*
+     * 测试
+     * 上传本地file
+     * 路径 /api/upload
+     * 传参 null
+     * 返回值(json--Result) code,message,data(str)
+     * */
+    @CrossOrigin
+    @PostMapping(value ="/upload")
+    @ResponseBody
+    public Result upload() {
+        String fileName = "test.txt";
+        boolean result = FtpUtil.ftpUpload(fileName, ftpConfig.getUrl(),ftpConfig.getPort(),ftpConfig.getUsername(),
+                ftpConfig.getPassword(), ftpConfig.getLocalDir(), ftpConfig.getRemotePath());
+        if (result)
+            return ResultFactory.buildSuccessResult("上传成功");
+        return ResultFactory.buildFailResult("上传失败");
+
+    }
+
+    /*
+     * 上传file
+     * 路径 /api/upload2
+     * 传参(MultipartFile) file
+     * 返回值(json--Result) code,message,data(List<String> urlList)
+     * */
+    @CrossOrigin
+    @PostMapping(value ="/upload2")
+    @ResponseBody
+    public Result upload(@RequestParam("file") MultipartFile[] mfiles) throws IOException {
+        List<File>files=new ArrayList<>();
+        for (MultipartFile mfile :mfiles) {
+            File file = new File(mfile.getOriginalFilename());
+            FileUtils.copyInputStreamToFile(mfile.getInputStream(), file);
+            files.add(file);
+        }
+
+        List<String> urlList=FtpUtil.ftpUpload2(files,ftpConfig.getUrl(),ftpConfig.getPort(),ftpConfig.getUsername(),
+                ftpConfig.getPassword(), ftpConfig.getRemotePath());
+        for (File file:files) {
+            if(file.exists()){
+                file.delete();
+            }
+        }
+        if (urlList!=null)
+            return ResultFactory.buildSuccessResult(urlList);
+
+        return ResultFactory.buildFailResult("上传失败");
+    }
+    /*
+     * 下载file
+     * 路径 /download
+     * 传参 filename
+     * 返回值(json--Result) code,message,data(str)
+     * */
+    @CrossOrigin
+    @GetMapping(value ="/download")
+    @ResponseBody
+    public Result download(String filename){
+        String remotePath="/",fileName=filename;
+        if (filename.contains("/")){
+            remotePath= filename.substring(0, filename.lastIndexOf("/"))+"\""; //get path
+            //fileName = "\""+filename.substring(filename.lastIndexOf("/") + 1, filename.length()); //get file name
+        }
+        System.out.println(remotePath);
+        boolean result = FtpUtil.ftpDownload(fileName, ftpConfig.getUrl(),ftpConfig.getPort(),ftpConfig.getUsername(),
+                ftpConfig.getPassword(), remotePath, ftpConfig.getDownDir() );
+        if (result)
+            return ResultFactory.buildSuccessResult("下载成功");
+        return ResultFactory.buildFailResult("下载失败！");
+    }
     @CrossOrigin
     @RequestMapping("/hello")
     public String hello(String username){
@@ -211,6 +292,28 @@ public class MainController {
                     return ResultFactory.buildSuccessResult(managerService.getManagerByEmail(manager.getEmail()));
                 }
                 break;
+            default:
+                break;
+        }
+        return ResultFactory.buildFailResult("获取用户信息失败!");
+    }
+    /*
+     * 请求方式：post
+     * 功能：获取用户信息
+     * 路径 /user/getAllUsers
+     * 传参(json):whichpeple(因该接口仅管理员可调用，所以，传参表示whichpeple想获取全部学生/老师的信息)
+     * 返回值(json--Result) code,message,data(Student/Staff)一个完整的Student/Staff类实例
+     * 类的具体字段见 Src/Pojo/..
+     */
+    @CrossOrigin
+    @PostMapping(value ="/user/getAllUsers")
+    @ResponseBody
+    public Result getAllUsers(@Valid @RequestBody User user){
+        switch (user.getWhichpeople()){
+            case 0:
+                return ResultFactory.buildSuccessResult(studentService.getAllStudents());
+            case 1:
+                return ResultFactory.buildSuccessResult(staffService.getAllStaff());
             default:
                 break;
         }

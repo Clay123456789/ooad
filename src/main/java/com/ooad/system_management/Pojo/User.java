@@ -222,6 +222,14 @@ public class User {
         this.whichpeople = whichpeople;
     }
 
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+
     /**
      * 将表单中的对象转化为数据库中存储的用户对象（剔除表单中的code）
      */
@@ -281,7 +289,8 @@ public class User {
                 ", managerid='" + managerid + '\'' +
                 ", account='" + account + '\'' +
                 ", password='" + password + '\'' +
-                ", name='" + stu_name + '\'' +
+                ", stu_name='" + stu_name + '\'' +
+                ", sta_name='" + sta_name + '\'' +
                 ", sex='" + sex + '\'' +
                 ", grade='" + grade + '\'' +
                 ", college='" + college + '\'' +
@@ -297,6 +306,7 @@ public class User {
                 ", code='" + code + '\'' +
                 ", touxiang='" + touxiang + '\'' +
                 ", whichpeople=" + whichpeople +
+                ", newPassword='" + newPassword + '\'' +
                 '}';
     }
 }

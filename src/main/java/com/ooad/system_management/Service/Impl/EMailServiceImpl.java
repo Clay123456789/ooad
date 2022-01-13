@@ -1,6 +1,9 @@
 package com.ooad.system_management.Service.Impl;
 
 
+import com.ooad.system_management.Pojo.Manager;
+import com.ooad.system_management.Pojo.Staff;
+import com.ooad.system_management.Pojo.Student;
 import com.ooad.system_management.Pojo.User;
 import com.ooad.system_management.Service.IEMailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,13 +135,22 @@ public class EMailServiceImpl implements IEMailService {
 
     @Override
     public boolean findPassword_sendEmail(String email) {
-        /*
-        if(userService.getUserByEmail(new User(email).getEmail())!=null){
+        if(studentService.getStudentByEmail(email)!=null||staffService.getStaffByEmail(email)!=null||managerService.getManagerByEmail(email)!=null){
             try {
                 SimpleMailMessage mailMessage = new SimpleMailMessage();
                 mailMessage.setSubject("找回密码邮件");//主题
+                String password=null;
                 //保存密码
-                String password=userService.getUserByEmail(new User(email).getEmail()).getPassword();
+                if(studentService.getStudentByEmail(email)!=null){
+                    password=studentService.getStudentByEmail(email).getPassword();
+                }
+                else if(staffService.getStaffByEmail(email)!=null){
+                    password=staffService.getStaffByEmail(email).getPassword();
+                }
+                else {
+                    password=managerService.getManagerByEmail(email).getPassword();
+                }
+
                 mailMessage.setText("您的密码是："+ password);
 
                 mailMessage.setTo(email);//发给谁
@@ -154,29 +166,63 @@ public class EMailServiceImpl implements IEMailService {
         }
         else
 
-         */
             return false;
-
     }
 
     @Override
-    public boolean changePassword(User userVo) {
-//         if(userService.updatePassword(userVo)){
-//                SimpleMailMessage mailMessage = new SimpleMailMessage();
-//                mailMessage.setSubject("修改密码邮件");//主题
-//                //保存密码
-//                String password=userService.getUserByEmail(userVo.getEmail()).getPassword();
-//                mailMessage.setText("您的账号已修改了密码，请确认是本人所为，注意账号安全");
-//
-//                mailMessage.setTo(userVo.getEmail());//发给谁
-//
-//                mailMessage.setFrom(from);//服务器邮箱
-//
-//                mailSender.send(mailMessage);//发送
-//                return true;
-//            }
-//            else
+    public boolean changePassword(User user) {
+        String email=user.getEmail();
+        if(studentService.getStudentByEmail(email)!=null||staffService.getStaffByEmail(email)!=null||managerService.getManagerByEmail(email)!=null) {
+            String password=user.getPassword();
+            String newPassword=user.getNewPassword();
+            String comPassword=null;
+            if(studentService.getStudentByEmail(email)!=null){
+                Student student=studentService.getStudentByEmail(email);
+                comPassword=student.getPassword();
+                System.out.println("之前的密码"+comPassword);
+                if(!comPassword.equals(password)) return false;
+                else{
+                    student.setPassword(newPassword);
+                    studentService.updateStudent(student);
+                }
+            }
+            else if(staffService.getStaffByEmail(email)!=null){
+                Staff staff=staffService.getStaffByEmail(email);
+                comPassword=staff.getPassword();
+                if(!comPassword.equals(password)) return false;
+                else{
+                    staff.setPassword(newPassword);
+                    staffService.updateStaff(staff);
+                }
+            }
+            else {
+                Manager manager=managerService.getManagerByEmail(email);
+                comPassword=manager.getPassword();
+
+                if(!comPassword.equals(password)) return false;
+                else{
+                    manager.setPassword(newPassword);
+                    managerService.updateManager(manager);
+                }
+            }
+            try{
+                SimpleMailMessage mailMessage = new SimpleMailMessage();
+                mailMessage.setSubject("修改密码邮件");//主题
+                //保存密码-
+                mailMessage.setText("您的账号已修改了密码，请确认是本人所为，注意账号安全");
+
+                mailMessage.setTo(email);//发给谁
+
+                mailMessage.setFrom(from);//服务器邮箱
+
+                mailSender.send(mailMessage);//发送
+            }catch (Exception e){
+                e.printStackTrace();
                 return false;
+            }
+            return true;
+        }
+        return false;
     }
 
 
